@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title><![CDATA[我的 OpooPress 博客]]></title>
+  <link href="http://yoursite.com/atom.xml" rel="self"/>
+  <link href="http://yoursite.com/"/>
+  <updated>2015-01-13T17:12:14+08:00</updated>
+  <id>http://yoursite.com/</id>
+  <author>
+    <name><![CDATA[您的姓名]]></name>
+    
+  </author>
+  <generator uri="http://press.opoo.org/">OpooPress</generator>
+
+  <entry>
+    <title type="html"><![CDATA[世界，你好！]]></title>
+    <link href="http://yoursite.com/article/2015/01/hello-world/"/>
+    <updated>2015-01-13T14:10:00+08:00</updated>
+    <id>http://yoursite.com/article/2015/01/hello-world/</id>
+    <content type="html"><![CDATA[<p>欢迎使用 <a href="http://www.opoopress.com/zh/">OpooPress</a>！</p>
+<p>这是系统自动生成的演示文章。编辑或者删除它，然后开始您的博客！</p>
+<p>当前版本: <em>1.1.0</em></p>
+]]></content>
+  </entry>
+</feed>
