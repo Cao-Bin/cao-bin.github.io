@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-01-20T11:24:53+08:00</updated>
+  <updated>2015-01-30T17:28:10+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -12,13 +12,19 @@
   <generator uri="http://press.opoo.org/">OpooPress</generator>
 
   <entry>
-    <title type="html"><![CDATA[世界，你好!！]]></title>
-    <link href="http://cao-bin.github.io//article/2015/01/hello-world/"/>
+    <title type="html"><![CDATA[博客搬家!！]]></title>
+    <link href="http://cao-bin.github.io//article/2015/01/bkbj/"/>
     <updated>2015-01-19T16:39:00+08:00</updated>
-    <id>http://cao-bin.github.io//article/2015/01/hello-world/</id>
-    <content type="html"><![CDATA[<p>欢迎使用 <a href="http://www.opoopress.com/zh/">OpooPress</a>！</p>
-<p>这是系统自动生成的演示文章。编辑或者删除它，然后开始您的博客！</p>
-<p>当前版本: <em>1.1.1</em></p>
+    <id>http://cao-bin.github.io//article/2015/01/bkbj/</id>
+    <content type="html"><![CDATA[<p>工作到现在，由于工作繁忙，陆陆续续写了些博客内容，几乎都是用的免费空间。
+免费空间嘛，你懂的。</p>
+<ol>
+<li>最开始是在javaeye， 那上面有不少大牛，写了几篇文章。后来javaeye被csdn收购了，没落了。</li>
+<li>后来Google的GAE兴起，折腾了几下，没多久就被墙了</li>
+<li>百度看Google搞的风声水起，出了个BAE，就用WordPress搭建了一个PHP博客，本来想就这样了，可是百度收费了。。。</li>
+<li>BAE的博客没有备份，最近工作又比较忙，没怎么写博客了，想想，还是需要将一些代码经验记录下来。
+看github有静态空间，果断放过来。还能放代码。</li>
+</ol>
 ]]></content>
   </entry>
 </feed>
