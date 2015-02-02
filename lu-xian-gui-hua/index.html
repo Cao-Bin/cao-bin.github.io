@@ -12,7 +12,7 @@
   <meta name="OpooPressSiteRoot" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="Generator" content="OpooPress-1.1.1"/>
-  <meta name="Generated" content="2015-02-02T13:47:18+08:00"/>
+  <meta name="Generated" content="2015-02-02T13:58:03+08:00"/>
   <link rel="canonical" href="/lu-xian-gui-hua/">
   
   
@@ -22,6 +22,7 @@
   
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
   <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic|PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link type="text/css" rel="stylesheet" href="/plugins/syntax-highlighter/styles/shCoreDefault.css"/>
   <!--[if lt IE 9]><script src="/javascripts/html5shiv.js"></script><![endif]-->
 </head>
 <body>
@@ -92,6 +93,82 @@
 5. 地址匹配技术，需要根据中文地址得到相应的坐标信息
 6. 空间分析，需要根据区域面筛选出该区域中的目标客户
 7. 其他：指定时间运行分析任务、任务命名等附加条件
+</pre><h5>关键代码</h5>
+<pre class='brush:java'>    /**
+     * 使用objects java 710beta 的导航路径分析类的findVRPPath方法实现路径分析服务
+     */
+    @Override
+    public TransportationAnalystResult findVRPPath(List&lt;Point2D&gt; orderPointsList, List&lt;Point2D&gt; netPoints,List&lt;PathPlanCar&gt; pathPlanCars, boolean withDetail,WeightNameType weightNameType ) throws Exception {
+        // 1.构建一个物流配送分析参数对象
+        VRPAnalystParameter vrpAnalystParameter = new VRPAnalystParameter();
+        // 设置障碍结点 ID 列表
+        int[] barrierNodes = new int[0];
+        vrpAnalystParameter.setBarrierNodes(barrierNodes);
+        // 设置障碍弧段 ID 列表
+        int[] barrierEdges = new int[0];
+        vrpAnalystParameter.setBarrierEdges(barrierEdges);
+        // 设置权值字段信息的名字标识
+        String [] weightNames=config.getWeightName().split(",");
+        int weightNameIndex=0; 
+        if(WeightNameType.MileAndTruck==weightNameType){
+            weightNameIndex=0;
+        }else if(WeightNameType.MileBlockTruck ==weightNameType){
+            weightNameIndex=1;
+        }else if(WeightNameType.TimeAndTruck ==weightNameType){
+            weightNameIndex=2;
+        }else {
+            weightNameIndex=3;
+        }
+        vrpAnalystParameter.setWeightName(weightNames[weightNameIndex].trim());
+
+        // 设置分析结果中包含路由对象的集合(即 GeoLineM 的集合)。
+        vrpAnalystParameter.setRoutesReturn(true);
+        // 设置分析结果中包含经过弧段集合
+        vrpAnalystParameter.setEdgesReturn(withDetail);
+        // 设置分析结果中包含行驶导引集合
+        vrpAnalystParameter.setPathGuidesReturn(withDetail);
+        vrpAnalystParameter.setNodesReturn(withDetail);
+        // 设置分析结果中要包含站点索引的集合
+        vrpAnalystParameter.setStopIndexesReturn(withDetail);
+
+        // 2.车辆信息数组
+        VehicleInfo[] vehicleInfos = new VehicleInfo[pathPlanCars.size()];
+        for (int i = 0; i &lt; pathPlanCars.size(); i++) {
+            PathPlanCar car=pathPlanCars.get(i);
+            VehicleInfo vehicleInfo = new VehicleInfo();
+            // 设置车辆的最大耗费值
+            vehicleInfo.setCost(config.getCost());
+            // 设置车辆的负载量
+            vehicleInfo.setLoadWeight(car.getLoadOrderNumber());
+            vehicleInfos[i] = vehicleInfo;
+        }
+
+
+
+        // 3.中心点信息数组
+        CenterPointInfo[] centerPointInfos = new CenterPointInfo[netPoints.size()];
+        for (int i = 0; i &lt; netPoints.size(); i++) {
+            CenterPointInfo centerPointInfo = new CenterPointInfo();
+            // 设置中心点ID
+            // centerPointInfo.setCenterID(i + 1);
+            // 设置中心点的坐标
+            Point2D centerPoint = netPoints.get(i);
+            centerPointInfo.setCenterPoint(centerPoint);
+            centerPointInfos[i] = centerPointInfo;
+        }
+
+        // 4.需求点信息数组
+        DemandPointInfo[] demandPointInfos = new DemandPointInfo[orderPointsList.size()];
+        for (int i = 0; i &lt; orderPointsList.size(); i++) {
+            DemandPointInfo demandPointInfo = new DemandPointInfo();
+            // 需求点(订单)的坐标
+            demandPointInfo.setDemand(1);
+            // demandPointInfo.setDemandID(i + 1);
+            demandPointInfo.setDemandPoint(orderPointsList.get(i));
+            demandPointInfos[i] = demandPointInfo;
+        }
+        return getTransportationAnalyst().findVRPPath(vrpAnalystParameter, vehicleInfos, centerPointInfos, demandPointInfos);
+    }
 </pre><h5>应用截图</h5>
 <p><img src="/images/path/path.jpg" alt="路线规划" /></p>
 </article>
@@ -142,6 +219,43 @@
 //-->
 </script>
 
+<!-- START: Syntax Highlighter ComPress -->
+<script type="text/javascript" src="/plugins/syntax-highlighter/scripts/shCore.js"></script>
+<script type="text/javascript" src="/plugins/syntax-highlighter/scripts/shAutoloader.js"></script>
+<script type="text/javascript">
+    SyntaxHighlighter.autoloader(
+        'applescript			/plugins/syntax-highlighter/scripts/shBrushAppleScript.js',
+        'actionscript3 as3		/plugins/syntax-highlighter/scripts/shBrushAS3.js',
+        'bash shell				/plugins/syntax-highlighter/scripts/shBrushBash.js',
+        'coldfusion cf			/plugins/syntax-highlighter/scripts/shBrushColdFusion.js',
+        'cpp c					/plugins/syntax-highlighter/scripts/shBrushCpp.js',
+        'c# c-sharp csharp		/plugins/syntax-highlighter/scripts/shBrushCSharp.js',
+        'css					/plugins/syntax-highlighter/scripts/shBrushCss.js',
+        'delphi pascal pas		/plugins/syntax-highlighter/scripts/shBrushDelphi.js',
+        'diff patch			    /plugins/syntax-highlighter/scripts/shBrushDiff.js',
+        'erl erlang				/plugins/syntax-highlighter/scripts/shBrushErlang.js',
+        'groovy					/plugins/syntax-highlighter/scripts/shBrushGroovy.js',
+        'java					/plugins/syntax-highlighter/scripts/shBrushJava.js',
+        'jfx javafx				/plugins/syntax-highlighter/scripts/shBrushJavaFX.js',
+        'js jscript javascript	/plugins/syntax-highlighter/scripts/shBrushJScript.js',
+        'perl pl				/plugins/syntax-highlighter/scripts/shBrushPerl.js',
+        'php					/plugins/syntax-highlighter/scripts/shBrushPhp.js',
+        'text plain				/plugins/syntax-highlighter/scripts/shBrushPlain.js',
+        'powershell ps          /plugins/syntax-highlighter/scripts/shBrushPowerShell.js',
+        'py python				/plugins/syntax-highlighter/scripts/shBrushPython.js',
+        'ruby rails ror rb		/plugins/syntax-highlighter/scripts/shBrushRuby.js',
+        'sass scss              /plugins/syntax-highlighter/scripts/shBrushSass.js',
+        'scala					/plugins/syntax-highlighter/scripts/shBrushScala.js',
+        'sql					/plugins/syntax-highlighter/scripts/shBrushSql.js',
+        'vb vbnet				/plugins/syntax-highlighter/scripts/shBrushVb.js',
+        'xml xhtml xslt html	/plugins/syntax-highlighter/scripts/shBrushXml.js'
+    );
+    SyntaxHighlighter.defaults['auto-links'] = false;                 
+    SyntaxHighlighter.defaults['toolbar'] = false;     
+    SyntaxHighlighter.defaults['tab-size'] = 4;
+    SyntaxHighlighter.all();
+</script>
+<!-- END: Syntax Highlighter ComPress -->
 
 </body>
 </html>
