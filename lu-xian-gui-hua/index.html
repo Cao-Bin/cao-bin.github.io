@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="zh"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>博客搬家!！ - 清风飒影 Blog</title>
+  <title>路线规划 - 清风飒影 Blog</title>
   <meta name="author" content="CaoBin">
   
   <meta name="HandheldFriendly" content="True">
@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="Generator" content="OpooPress-1.1.1"/>
   <meta name="Generated" content="2015-02-02T13:47:18+08:00"/>
-  <link rel="canonical" href="/article/2015/01/bkbj/">
+  <link rel="canonical" href="/lu-xian-gui-hua/">
   
   
   <link href="/favicon.ico" rel="icon">
@@ -47,7 +47,7 @@
     <option value="/">&raquo; 文章</option>
     <option value="/archives/">&raquo; 归档</option>
     <option value="/gps.html">&raquo; GPS纠偏</option>
-    <option value="/lu-xian-gui-hua/">&raquo; 路线规划</option>
+    <option value="/lu-xian-gui-hua/" selected="selected">&raquo; 路线规划</option>
     <option value="/about/">&raquo; 关于</option>
   </select>
 </fieldset>
@@ -63,44 +63,37 @@
   <div id="main">
     <div id="content">
 <div>
-<article class="hentry" role="article">
+<article role="article">
   <header>
-      <h1 class="entry-title">博客搬家!！</h1>
-
-      <p class="meta">
-		
+    <h1 class="entry-title">路线规划</h1>
+    <p class="meta">
 
 
-<time datetime="2015-01-19T16:39:00+08:00" pubdate>一月 19 2015</time>
-      </p>
+<time datetime="2015-02-02T10:57:00+08:00" pubdate>二月 2 2015</time></p>
   </header>
-
-  <div class="entry-content"><p>工作到现在，由于工作繁忙，陆陆续续写了些博客内容，几乎都是用的免费空间。
-免费空间嘛，你懂的。</p>
-<ol>
-<li>最开始是在javaeye， 那上面有不少大牛，写了几篇文章。后来javaeye被csdn收购了，没落了。</li>
-<li>后来Google的GAE兴起，折腾了几下，没多久就被墙了</li>
-<li>百度看Google搞的风声水起，出了个BAE，就用WordPress搭建了一个PHP博客，本来想就这样了，可是百度收费了。。。</li>
-<li>BAE的博客没有备份，最近工作又比较忙，没怎么写博客了，想想，还是需要将一些代码经验记录下来。
-看github有静态空间，果断放过来。还能放代码。</li>
-</ol>
-</div>
-  <footer>
-    <p class="meta">
-<span class="byline author vcard">作者 <span class="fn">CaoBin</span></span>      
-
-
-<time datetime="2015-01-19T16:39:00+08:00" pubdate>一月 19 2015</time>
-
-
-
-    </p>
-<div class="sharing">
-  </div>
-    <p class="meta">
-        <a class="basic-alignment right" href="/article/2015/01/crm/" title="下一篇: crm系统">crm系统 &raquo;</a>
-    </p>
-  </footer>
+<h5>应用场景</h5>
+<pre>1. 中小型快递物流公司。快递员投递物件时，一般凭经验行走线路，没有考虑路程长短、时间长短、
+   是否禁止货车通行，道路阻塞等情况
+2. 物流公司需要给员工发放交通补贴时，无法较为准确的评估行驶里程。
+3. 各个目标客户的分布经常变化，难以较为科学的快速配送
+4. 配送车辆有多有少，网点业务分布不同。配送范围有重合
+</pre><h5>需求分析</h5>
+<pre>1. 考虑设置配送计算阀值条件：路程最短、时间最短、是否允许货车通行、禁左等
+2. 实现里程计算、耗时计算。
+3. 指定配送范围内的目标客户加入计算。
+4. 根据车辆多少来分配每辆车运送的订单
+5. 显示配送顺序
+6. 显示具体行驶道路信息
+</pre><h5>功能实现</h5>
+<pre>1. 需要网络数据集
+2. 需要转向表
+3. 使用Supermap Objects Java 7C组件以上版本的findVRPPath物流配送分析方法
+4. 数据处理，根据具体的禁左、里程等条件，处理相关字段列
+5. 地址匹配技术，需要根据中文地址得到相应的坐标信息
+6. 空间分析，需要根据区域面筛选出该区域中的目标客户
+7. 其他：指定时间运行分析任务、任务命名等附加条件
+</pre><h5>应用截图</h5>
+<p><img src="/images/path/path.jpg" alt="路线规划" /></p>
 </article>
 </div>
 <aside class="sidebar">
@@ -142,7 +135,7 @@
 <script type="text/javascript" src="/javascripts/opoopress.min.js"></script>
 <script language="JavaScript">
 <!--
-    window.OpooPress = new OpooPressApp({siteUrl:'http://cao-bin.github.io/',rootUrl:'',pageUrl:'/article/2015/01/bkbj/',title:'博客搬家!！',github:{target:'#gh_repos',user:'cao-bin',count:1,skip_forks:true},refreshRelativeTimes:true,verbose:false},{});
+    window.OpooPress = new OpooPressApp({siteUrl:'http://cao-bin.github.io/',rootUrl:'',pageUrl:'/lu-xian-gui-hua/',title:'路线规划',github:{target:'#gh_repos',user:'cao-bin',count:1,skip_forks:true},refreshRelativeTimes:true,verbose:false},{});
     OpooPress.init();
 
 
@@ -152,4 +145,3 @@
 
 </body>
 </html>
-
