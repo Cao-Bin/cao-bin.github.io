@@ -12,7 +12,7 @@
   <meta name="OpooPressSiteRoot" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="Generator" content="OpooPress-1.1.1"/>
-  <meta name="Generated" content="2015-02-02T13:58:03+08:00"/>
+  <meta name="Generated" content="2015-02-02T15:51:13+08:00"/>
   <link rel="canonical" href="/gps.html">
   
   
@@ -74,29 +74,27 @@
   </header>
 <p>GPS（WGS84）坐标是不能够直接放到百度地图或者google地图上的，放到百度地图或者google地图上，
 会有偏移现象。所以，车载终端上传的GPS坐标需要通过纠偏来矫正这个偏移。</p>
-<p>三种坐标</p>
-<ol>
-<li>GPS坐标，WGS84标准</li>
-<li>谷歌坐标=火星坐标=WGS84+GCJ02，即通过国测局发布的GCJ02标准加密后的坐标。</li>
-<li>百度坐标BD09=谷歌坐标+BD09=WGS84+GCJ02+BD09，BD09是百度自己的二次加密算法。</li>
-</ol>
-<p>互转关系
-百度坐标简称：BD09，谷歌坐标简称：GCJ02，GPS坐标：WGS84</p>
-<ol>
-<li>WGS84->GCJ02<pre>GPS加偏，一般的互联网地图都是GCJ02标准，如：谷歌
-</pre></li>
-<li>GCJ02->BD09<pre>百度地图的标准
-</pre></li>
-<li>WGS84->BD09<pre>定位到百度的GPS坐标，通过百度API会自动转换为BD09标准进行定位
-</pre></li>
-<li>BD09->GCJ02<pre>百度坐标到火星坐标
-</pre></li>
-<li>BD09->WGS84<pre>通过先转换到GCJ02，在通过GCJ02转换到WGS84.有精度丢失
-</pre></li>
-<li>GCJ02->WGS84<pre>二分法逆转
-</pre></li>
-</ol>
-<p>其中 bd_encrypt 将 GCJ-02 坐标转换成 BD-09 坐标， bd_decrypt 反之</p>
+<h5>三种坐标</h5>
+<pre>1.  GPS坐标，WGS84标准
+2.  谷歌坐标=火星坐标=WGS84+GCJ02，即通过国测局发布的GCJ02标准加密后的坐标。
+3.  百度坐标BD09=谷歌坐标+BD09=WGS84+GCJ02+BD09，BD09是百度自己的二次加密算法。
+</pre><h5>互转关系</h5>
+<pre>百度坐标简称：BD09，谷歌坐标简称：GCJ02，GPS坐标：WGS84
+1.  WGS84-&gt;GCJ02
+    GPS加偏，一般的互联网地图都是GCJ02标准，如：谷歌
+2.  GCJ02-&gt;BD09
+    百度地图的标准
+3.  WGS84-&gt;BD09
+    定位到百度的GPS坐标，通过百度API会自动转换为BD09标准进行定位
+4.  BD09-&gt;GCJ02
+    百度坐标到火星坐标
+5.  BD09-&gt;WGS84
+    通过先转换到GCJ02，在通过GCJ02转换到WGS84.有精度丢失
+6.  GCJ02-&gt;WGS84
+    二分法逆转
+</pre><h5>部分算法</h5>
+<p>注：算法来自于网络
+其中 bd_encrypt 将 GCJ-02 坐标转换成 BD-09 坐标， bd_decrypt 反之</p>
 <pre class='brush:c'>#include &lt;math.h&gt;
 
 const double x_pi = 3.14159265358979324 * 3000.0 / 180.0;
@@ -203,8 +201,7 @@ def gcj2wgs(lat, lon):
     d_lat = g_lat - lat  
     d_lon = g_lon - lon  
     return lat - d_lat, lon - d_lon  
-</pre><p>算法来自于网络</p>
-</article>
+</pre></article>
 </div>
     </div>
   </div>
