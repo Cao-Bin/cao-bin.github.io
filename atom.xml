@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-02-02T15:51:13+08:00</updated>
+  <updated>2015-02-02T17:31:08+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -19,16 +19,15 @@
     <content type="html"><![CDATA[<p>经同学介绍帮忙做一个内部管理用的CRM系统。
 正好最近在学习JFinal。就用JFinal做了。用户权限是现成的，总共花了5天时间。<br  />
 jfinal开发系统，真是快！</p>
-<p>主要业务逻辑有</p>
-<ol>
-<li>添加员工（业务员），信息员，客户。</li>
-<li>信息员/客户 回访功能</li>
-<li>主管审查、批复、删除功能</li>
-<li>回访自动过期功能（timmer实现）</li>
-<li>系统日志，PV，JVM监控等辅助功能</li>
-</ol>
-<p>部分竣工截图</p>
-<p><img src="/images/crm/login.png" alt="登陆" />
+<h5>主要业务逻辑</h5>
+<pre>1.  添加员工（业务员），信息员，客户。
+2.  信息员/客户 回访功能
+3.  主管审查、批复、删除功能
+4.  回访自动过期功能（timmer实现）
+5.  系统日志，PV，JVM监控等辅助功能
+</pre><p>部分竣工截图
+<img src="/images/crm/index.png" alt="主页" />
+<img src="/images/crm/login.png" alt="登陆" />
 <img src="/images/crm/addmsger.png" alt="添加信息员" />
 <img src="/images/crm/allmsger.png" alt="查询所有信息员" /></p>
 ]]></content>
