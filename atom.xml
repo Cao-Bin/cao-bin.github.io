@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-02-03T11:22:53+08:00</updated>
+  <updated>2015-02-03T17:17:29+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -11,6 +11,112 @@
   </author>
   <generator uri="http://press.opoo.org/">OpooPress</generator>
 
+  <entry>
+    <title type="html"><![CDATA[Openlayers2加载百度地图]]></title>
+    <link href="http://cao-bin.github.io//article/2015/02/ol2baidumap/"/>
+    <updated>2015-02-03T17:03:00+08:00</updated>
+    <id>http://cao-bin.github.io//article/2015/02/ol2baidumap/</id>
+    <content type="html"><![CDATA[<p>可以完成加载百度地图，但使用纠偏后的坐标定位有偏移。将下面连接的代码做了部分修改。
+转<a href="http://www.cnblogs.com/songjiang6940/p/4139258.html">http://www.cnblogs.com/songjiang6940/p/4139258.html</a></p>
+<p><img src="/images/2015-02-03-ol2baidumap/bj.png" alt="主页" /></p>
+<pre class='brush:javascript'>OpenLayers.Layer.Baidu = OpenLayers.Class(OpenLayers.Layer.TileCache, {
+    initialize: function (name, url, options) {
+        var tempoptions = OpenLayers.Util.extend({
+        'format': 'image/png',
+        isBaseLayer: true
+        }, options);
+        OpenLayers.Layer.TileCache.prototype.initialize.apply(this, [name, url, {},
+        tempoptions]);
+        this.extension = this.format.split('/')[1].toLowerCase();
+        this.extension = (this.extension == 'jpg') ? 'jpeg' : this.extension;
+        this.transitionEffect = "resize";
+        this.buffer = 0;
+    },
+    /**
+    * 按地图引擎切图规则实现的拼接方式
+    */
+    getURL: function (bounds) {
+        var tilez=this.map.zoom-1;
+        var res = this.map.getResolution();
+        var bbox = this.map.getMaxExtent();
+        var size = this.tileSize;
+        var bx = Math.round((bounds.left - this.tileOrigin.lon) / (res * size.w));
+        var by = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * size.h));
+        tilez = tilez + 1; 
+        var x = bx.toString().replace("-","M"); 
+        var y = by.toString().replace("-","M"); 
+        var urlsNum = parseInt((bx + by) % this.url.length); 
+        var strURL = ""; 
+        strURL = this.url[urlsNum] + '?qt=tile&amp;x='+x+'&amp;y='+y+'&amp;z='+tilez+'&amp;styles=pl&amp;udt=20140807';
+        return strURL;
+    },
+    clone: function (obj) {
+        if (obj == null) {
+            obj = new OpenLayers.Layer.Baidu(this.name, this.url, this.options);
+        }
+        obj = OpenLayers.Layer.TileCache.prototype.clone.apply(this, [obj]);
+        return obj;
+    },
+    CLASS_NAME: "OpenLayers.Layer.Baidu"
+});
+
+/**
+ * 墨卡托投影坐标转换为经纬度坐标
+ */
+function meterXY2GeoLoc(x, y, precision){
+    var earthCircumferenceInMeters = new Number(40075016.685578488);
+    var halfEarthCircumferenceInMeters = earthCircumferenceInMeters / 2;
+
+    var geoX = x/halfEarthCircumferenceInMeters*180;
+    var geoY = y/halfEarthCircumferenceInMeters*180;
+    geoY = Math.atan(Math.exp(geoY * (Math.PI / 180.0)))*360.0/Math.PI - 90;
+
+    geoX = setPrecision(geoX, precision);
+    geoY = setPrecision(geoY, precision);
+
+    var obj = new Object();
+    obj.lngX = geoX;
+    obj.latY = geoY;
+    return obj;
+}
+
+/**
+ * 经纬度坐标转墨卡托投影坐标
+ */
+function geoLoc2MeterXY(x, y){
+    var earthCircumferenceInMeters = new Number(40075016.685578488);
+    var halfEarthCircumferenceInMeters = earthCircumferenceInMeters / 2;
+
+    var geoX = new Number(x);
+    var geoY = new Number(y);
+
+    var mx = geoX / 180.0 * halfEarthCircumferenceInMeters;
+    var my = Math.log(Math.tan((90 + geoY) * Math.PI / 360.0)) / (Math.PI / 180.0);
+    my = my / 180.0 * halfEarthCircumferenceInMeters;
+
+    var obj = new Object();
+    obj.lngX = mx;
+    obj.latY = my;
+    return obj;
+}
+//这个参数在对接中还是稍微有y轴的偏移，考虑因该是百度平面坐标系不是基于web墨卡托投影，而这个用的是web墨卡托投影的方式却对接的。
+var tileOrigin = new OpenLayers.LonLat(0,28000);
+//var tileOrigin = new OpenLayers.LonLat(-120,22000);
+var maxExtent = new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34);
+var opts = {numZoomLevels:20,maxResolution:262144,maxExtent :maxExtent ,tileOrigin :tileOrigin }
+
+var baidu = new OpenLayers.Layer.Baidu ('baidu',["http://online1.map.bdimg.com/tile/"],opts);
+var map = new OpenLayers.Map("map",{projection:"EPSG:900913",displayProjection:"EPSG:4326"});
+
+map.addLayers([baidu]);
+//成都-天府广场//baidu:104.072593, 30.663547,GPS:104.0636,30.6599,google:104.066109, 30.657483
+//北京-天安门拱桥//baidu:116.40392 ,39.914552,GPS:116.3913,39.9068,google:116.397547, 39.908208
+var center=geoLoc2MeterXY(104.072593, 30.663547);
+//北京
+map.setCenter(new OpenLayers.LonLat(12958399.4681885, 4852082.44060595),10);
+//map.setCenter(new OpenLayers.LonLat(center.lngX, center.latY),18);
+</pre>]]></content>
+  </entry>
   <entry>
     <title type="html"><![CDATA[crm系统]]></title>
     <link href="http://cao-bin.github.io//article/2015/01/crm/"/>
