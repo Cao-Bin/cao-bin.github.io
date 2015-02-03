@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-02-03T17:17:29+08:00</updated>
+  <updated>2015-02-03T17:31:02+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -17,7 +17,7 @@
     <updated>2015-02-03T17:03:00+08:00</updated>
     <id>http://cao-bin.github.io//article/2015/02/ol2baidumap/</id>
     <content type="html"><![CDATA[<p>可以完成加载百度地图，但使用纠偏后的坐标定位有偏移。将下面连接的代码做了部分修改。
-转<a href="http://www.cnblogs.com/songjiang6940/p/4139258.html">http://www.cnblogs.com/songjiang6940/p/4139258.html</a></p>
+[转]<a href="http://www.cnblogs.com/songjiang6940/p/4139258.html">http://www.cnblogs.com/songjiang6940/p/4139258.html</a></p>
 <p><img src="/images/2015-02-03-ol2baidumap/bj.png" alt="主页" /></p>
 <pre class='brush:javascript'>OpenLayers.Layer.Baidu = OpenLayers.Class(OpenLayers.Layer.TileCache, {
     initialize: function (name, url, options) {
