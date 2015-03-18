@@ -4,16 +4,16 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="zh"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>清风飒影 Blog</title>
+  <title>jfinal集成dubbo - 清风飒影 Blog</title>
   <meta name="author" content="CaoBin">
-  <meta name="description" content="清风飒影的个人博客，GAE被墙，BAE被赶，只能到这里了 -_-!。">
+  <meta name="description" content="jfinal集成dubbo">
   <meta name="HandheldFriendly" content="True">
   <meta name="MobileOptimized" content="320">
   <meta name="OpooPressSiteRoot" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="Generator" content="OpooPress-1.1.1"/>
   <meta name="Generated" content="2015-03-18T10:36:51+08:00"/>
-  <link rel="canonical" href="/">
+  <link rel="canonical" href="/article/2015/03/jfinal-ji-cheng-dubbo/">
   
   
   <link href="/favicon.ico" rel="icon">
@@ -25,7 +25,7 @@
   <link type="text/css" rel="stylesheet" href="/plugins/syntax-highlighter/styles/shCoreDefault.css"/>
   <!--[if lt IE 9]><script src="/javascripts/html5shiv.js"></script><![endif]-->
 </head>
-<body>
+<body class="no-sidebar">
   <!--[if lt IE 9]><script src="/javascripts/unsupported-browser.js"></script><![endif]-->
   <header role="banner"><hgroup>
   <h1><a href="/">清风飒影 Blog</a></h1>
@@ -45,7 +45,7 @@
 <fieldset class="mobile-nav">
   <select onchange="if (this.value) { window.location.href = this.value;}">
     <option value="">导航&hellip;</option>
-    <option value="/" selected="selected">&raquo; 文章</option>
+    <option value="/">&raquo; 文章</option>
     <option value="/archives/">&raquo; 归档</option>
     <option value="/gps.html">&raquo; GPS纠偏</option>
     <option value="/lu-xian-gui-hua/">&raquo; 路线规划</option>
@@ -63,17 +63,17 @@
 </nav>
   <div id="main">
     <div id="content">
-<div class="blog-index">
-    <article>
+<div>
+<article class="hentry" role="article">
   <header>
-      <h1 class="entry-title"><a href="/article/2015/03/jfinal-ji-cheng-dubbo/">Jfinal集成dubbo</a></h1>
+      <h1 class="entry-title">Jfinal集成dubbo</h1>
 
       <p class="meta">
 		
 
 
 <time datetime="2015-03-18T09:54:00+08:00" pubdate>三月 18 2015</time>
-         | <a href="/article/2015/03/jfinal-ji-cheng-dubbo/#disqus_thread">评论</a>
+         | <a href="#disqus_thread">评论</a>
       </p>
   </header>
 
@@ -188,258 +188,32 @@ public class MessengerController extends BaseController {
     }
 }
 </pre></div>
-    </article>
-    <article>
-  <header>
-      <h1 class="entry-title"><a href="/article/2015/02/ol2baidumap/">Openlayers2加载百度地图</a></h1>
-
-      <p class="meta">
-		
+  <footer>
+    <p class="meta">
+<span class="byline author vcard">作者 <span class="fn">CaoBin</span></span>      
 
 
-<time datetime="2015-02-03T17:03:00+08:00" pubdate>二月 3 2015</time>
-         | <a href="/article/2015/02/ol2baidumap/#disqus_thread">评论</a>
-      </p>
-  </header>
+<time datetime="2015-03-18T09:54:00+08:00" pubdate>三月 18 2015</time>
 
-  <div class="entry-content"><p>可以完成加载百度地图，但使用纠偏后的坐标定位有偏移。将下面连接的代码做了部分修改。
-[转]<a href="http://www.cnblogs.com/songjiang6940/p/4139258.html">http://www.cnblogs.com/songjiang6940/p/4139258.html</a></p>
-<p><img src="/images/2015-02-03-ol2baidumap/bj.png" alt="主页" /></p>
-<pre class='brush:javascript'>OpenLayers.Layer.Baidu = OpenLayers.Class(OpenLayers.Layer.TileCache, {
-    initialize: function (name, url, options) {
-        var tempoptions = OpenLayers.Util.extend({
-        'format': 'image/png',
-        isBaseLayer: true
-        }, options);
-        OpenLayers.Layer.TileCache.prototype.initialize.apply(this, [name, url, {},
-        tempoptions]);
-        this.extension = this.format.split('/')[1].toLowerCase();
-        this.extension = (this.extension == 'jpg') ? 'jpeg' : this.extension;
-        this.transitionEffect = "resize";
-        this.buffer = 0;
-    },
-    /**
-    * 按地图引擎切图规则实现的拼接方式
-    */
-    getURL: function (bounds) {
-        var tilez=this.map.zoom-1;
-        var res = this.map.getResolution();
-        var bbox = this.map.getMaxExtent();
-        var size = this.tileSize;
-        var bx = Math.round((bounds.left - this.tileOrigin.lon) / (res * size.w));
-        var by = Math.round((bounds.bottom - this.tileOrigin.lat) / (res * size.h));
-        tilez = tilez + 1; 
-        var x = bx.toString().replace("-","M"); 
-        var y = by.toString().replace("-","M"); 
-        var urlsNum = parseInt((bx + by) % this.url.length); 
-        var strURL = ""; 
-        strURL = this.url[urlsNum] + '?qt=tile&amp;x='+x+'&amp;y='+y+'&amp;z='+tilez+'&amp;styles=pl&amp;udt=20140807';
-        return strURL;
-    },
-    clone: function (obj) {
-        if (obj == null) {
-            obj = new OpenLayers.Layer.Baidu(this.name, this.url, this.options);
-        }
-        obj = OpenLayers.Layer.TileCache.prototype.clone.apply(this, [obj]);
-        return obj;
-    },
-    CLASS_NAME: "OpenLayers.Layer.Baidu"
-});
-
-/**
- * 墨卡托投影坐标转换为经纬度坐标
- */
-function meterXY2GeoLoc(x, y, precision){
-    var earthCircumferenceInMeters = new Number(40075016.685578488);
-    var halfEarthCircumferenceInMeters = earthCircumferenceInMeters / 2;
-
-    var geoX = x/halfEarthCircumferenceInMeters*180;
-    var geoY = y/halfEarthCircumferenceInMeters*180;
-    geoY = Math.atan(Math.exp(geoY * (Math.PI / 180.0)))*360.0/Math.PI - 90;
-
-    geoX = setPrecision(geoX, precision);
-    geoY = setPrecision(geoY, precision);
-
-    var obj = new Object();
-    obj.lngX = geoX;
-    obj.latY = geoY;
-    return obj;
-}
-
-/**
- * 经纬度坐标转墨卡托投影坐标
- */
-function geoLoc2MeterXY(x, y){
-    var earthCircumferenceInMeters = new Number(40075016.685578488);
-    var halfEarthCircumferenceInMeters = earthCircumferenceInMeters / 2;
-
-    var geoX = new Number(x);
-    var geoY = new Number(y);
-
-    var mx = geoX / 180.0 * halfEarthCircumferenceInMeters;
-    var my = Math.log(Math.tan((90 + geoY) * Math.PI / 360.0)) / (Math.PI / 180.0);
-    my = my / 180.0 * halfEarthCircumferenceInMeters;
-
-    var obj = new Object();
-    obj.lngX = mx;
-    obj.latY = my;
-    return obj;
-}
-//这个参数在对接中还是稍微有y轴的偏移，考虑因该是百度平面坐标系不是基于web墨卡托投影，而这个用的是web墨卡托投影的方式却对接的。
-var tileOrigin = new OpenLayers.LonLat(0,28000);
-//var tileOrigin = new OpenLayers.LonLat(-120,22000);
-var maxExtent = new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34);
-var opts = {numZoomLevels:20,maxResolution:262144,maxExtent :maxExtent ,tileOrigin :tileOrigin }
-
-var baidu = new OpenLayers.Layer.Baidu ('baidu',["http://online1.map.bdimg.com/tile/"],opts);
-var map = new OpenLayers.Map("map",{projection:"EPSG:900913",displayProjection:"EPSG:4326"});
-
-map.addLayers([baidu]);
-//成都-天府广场//baidu:104.072593, 30.663547,GPS:104.0636,30.6599,google:104.066109, 30.657483
-//北京-天安门拱桥//baidu:116.40392 ,39.914552,GPS:116.3913,39.9068,google:116.397547, 39.908208
-var center=geoLoc2MeterXY(104.072593, 30.663547);
-//北京
-map.setCenter(new OpenLayers.LonLat(12958399.4681885, 4852082.44060595),10);
-//map.setCenter(new OpenLayers.LonLat(center.lngX, center.latY),18);
-</pre></div>
-    </article>
-    <article>
-  <header>
-      <h1 class="entry-title"><a href="/article/2015/01/crm/">Crm系统</a></h1>
-
-      <p class="meta">
-		
+<span class="categories">属于 <a class="category" href="/category/jfinal/">jfinal</a>
+ 分类</span>
 
 
-<time datetime="2015-01-30T17:32:00+08:00" pubdate>一月 30 2015</time>
-         | <a href="/article/2015/01/crm/#disqus_thread">评论</a>
-      </p>
-  </header>
-
-  <div class="entry-content"><p>经朋友介绍，帮忙做一个内部管理用的CRM系统。用于规范工作流，方便领导管理。</p>
-<h5>业务对象</h5>
-<pre>1.  员工（业务员+主管）：
-用户名，密码，姓名，ids，uuid（自增），创建时间
-
-2.  信息员：
-电话号码（1个，必填），qq 1个，姓名1个，公司名称，商圈名称，ids，uuid，录入时间（YYMMDDHHMMSS），是否过期，回访时间（业务员可以调整）
-注意：信息员名称‘电话  业务员不能修改，主管可以修改。
-
-3.  客户（添加信息员后，才能针对信息员添加他下面的客户）
-ids，uuid，qq,项目类型（办公，餐饮，酒店，卖场，展会），公司名称，甲方负责人姓名和电话（1-3对，必须1个）
-甲方负责人职位1个，量房时间，量房地点，主营业务，项目地址，建筑面积，办公地址，工程类型（新装工程，
-整体改造，局部改造），房屋类型（租赁房屋，购买房屋），备注信息
-
-4.  回访记录（员工只能添加，不能删除，不能修改）
-ids，uuid，内容，添加时间（系统自动生成）
-
-查询条件：姓名，电话，编码，（查询客户时，可以加一个查询条件：信息员姓名）
-</pre><h5>业务逻辑</h5>
-<pre>业务员
-1.  员工录入信息员/客户后，在系统里显示录入时间（自动生成）
-2.  其他员工不能重复录入信息员/客户（以电话为判断标准）。重复录入时提示：已录入，在XX业务员下
-3.  业务员可以针对某个信息员/客户添加“回访记录”，回访记录时间有系统自动生成
-4.  业务员不能删除信息员/客户
-5.  业务员查询客户时，单独一个页面显示所有信息员的客户（查询条件，姓名，电话，编码，信息员）。
-    查询后可以修改客户信息，但不能修改客户的电话号码。
-6.  每个业务员只能看自己的信息业/客户
-
-主管（主管也有员工的录入信息功能）
-1.  市场部主管可以看下面业务员录入的信息员/客户信息，但不包括电话号码
-2.  市场部主管可以调配信息由/客户到其他业务员下（可以批量调配）
-3.  批复：（可以批量操作）
-3.1 录入信息后，自动生成回访时间（默认为10天以后）.
-3.2 业务员可以调整回访时间
-3.3 如果10天后仍未回访，就不能再回访（系统显示过期）
-3.4 市场部主管可以批复过期的信息，系统将回访时间调整到当前时间10条后
-4.  主管可以删除信息员/客户
-5.  主管可以删除回访记录
-</pre><p>部分竣工截图
-<img src="/images/crm/index.png" alt="主页" />
-<img src="/images/crm/login.png" alt="登陆" />
-<img src="/images/crm/addmsger.png" alt="添加信息员" />
-<img src="/images/crm/allmsger.png" alt="查询所有信息员" /></p>
+<span class="categories">被贴了 <a class="tag" href="/tag/jfinal/">jfinal</a>, <a class="tag" href="/tag/dubbo/">dubbo</a>, <a class="tag" href="/tag/spring/">spring</a>
+ 标签</span>
+    </p>
+<div class="sharing">
+  </div>
+    <p class="meta">
+        <a class="basic-alignment left" href="/article/2015/02/ol2baidumap/" title="上一篇: Openlayers2加载百度地图">&laquo; Openlayers2加载百度地图</a>
+    </p>
+  </footer>
+</article>
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript></div>
+  </section>
 </div>
-    </article>
-    <article>
-  <header>
-      <h1 class="entry-title"><a href="/article/2015/01/bkbj/">博客搬家!！</a></h1>
-
-      <p class="meta">
-		
-
-
-<time datetime="2015-01-19T16:39:00+08:00" pubdate>一月 19 2015</time>
-         | <a href="/article/2015/01/bkbj/#disqus_thread">评论</a>
-      </p>
-  </header>
-
-  <div class="entry-content"><p>工作到现在，由于工作繁忙，陆陆续续写了些博客内容，几乎都是用的免费空间。
-免费空间嘛，你懂的。</p>
-<ol>
-<li>最开始是在javaeye， 那上面有不少大牛，写了几篇文章。后来javaeye被csdn收购了，没落了。</li>
-<li>后来Google的GAE兴起，折腾了几下，没多久就被墙了</li>
-<li>百度看Google搞的风声水起，出了个BAE，就用WordPress搭建了一个PHP博客，本来想就这样了，可是百度收费了。。。</li>
-<li>BAE的博客没有备份，最近工作又比较忙，没怎么写博客了，想想，还是需要将一些代码经验记录下来。
-看github有静态空间，果断放过来。还能放代码。</li>
-</ol>
-</div>
-    </article>
-  
-  <div class="pagination">
-<span class="pagebar">
-<span class="nolink-page" title="第 1 页，共 1 页">1/1</span>
-
-
-
-
-<span class="current-page">1</span>
-
-
-
-
-</span>
-<a class="next" href="/archives">文章目录</a>  </div>
-</div>
-<aside class="sidebar">
-<section>
-  <h1>近期文章</h1>
-  <ul id="recent_posts">
-  
-  
-      <li class="post">
-        <a href="/article/2015/03/jfinal-ji-cheng-dubbo/">Jfinal集成dubbo</a>
-      </li>
-      <li class="post">
-        <a href="/article/2015/02/ol2baidumap/">Openlayers2加载百度地图</a>
-      </li>
-      <li class="post">
-        <a href="/article/2015/01/crm/">Crm系统</a>
-      </li>
-      <li class="post">
-        <a href="/article/2015/01/bkbj/">博客搬家!！</a>
-      </li>
-  </ul>
-</section>
-<section>
-  <h1>GitHub Repos</h1>
-  <ul id="gh_repos">
-    <li class="loading">Status updating...</li>
-  </ul>
-</section>
-
-<section>
-  <h1>分类</h1>
-  <ul id="categories">
-	<li class="category"><a href="/category/crm/">crm</a><span class="count right">1</span>
-	</li>
-	<li class="category"><a href="/category/di-tu/">地图</a><span class="count right">1</span>
-	</li>
-	<li class="category"><a href="/category/jfinal/">jfinal</a><span class="count right">1</span>
-	</li>
-  </ul>
-</section>
-</aside>
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -450,11 +224,17 @@ ids，uuid，内容，添加时间（系统自动生成）
 <script type="text/javascript" src="/javascripts/opoopress.min.js"></script>
 <script language="JavaScript">
 <!--
-    window.OpooPress = new OpooPressApp({siteUrl:'http://cao-bin.github.io/',rootUrl:'',pageUrl:'/',github:{target:'#gh_repos',user:'cao-bin',count:1,skip_forks:true},refreshRelativeTimes:true,verbose:false},{});
+    window.OpooPress = new OpooPressApp({siteUrl:'http://cao-bin.github.io/',rootUrl:'',pageUrl:'/article/2015/03/jfinal-ji-cheng-dubbo/',title:'jfinal集成dubbo',refreshRelativeTimes:true,verbose:false},{});
     OpooPress.init();
 
     var disqus_shortname = 'caobin';
-    OpooPress.showDisqusCommentCount();
+    
+    // var disqus_developer = 1;
+    var disqus_identifier = 'http://cao-bin.github.io//article/2015/03/jfinal-ji-cheng-dubbo/';
+    var disqus_url = 'http://cao-bin.github.io//article/2015/03/jfinal-ji-cheng-dubbo/';
+    var disqus_title = 'jfinal集成dubbo';
+    //var disqus_category_id = '';
+    OpooPress.showDisqusWidgets();
 
 //-->
 </script>
@@ -499,3 +279,4 @@ ids，uuid，内容，添加时间（系统自动生成）
 
 </body>
 </html>
+

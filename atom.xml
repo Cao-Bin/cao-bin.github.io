@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-02-09T13:38:10+08:00</updated>
+  <updated>2015-03-18T10:36:51+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -11,6 +11,123 @@
   </author>
   <generator uri="http://press.opoo.org/">OpooPress</generator>
 
+  <entry>
+    <title type="html"><![CDATA[jfinal集成dubbo]]></title>
+    <link href="http://cao-bin.github.io//article/2015/03/jfinal-ji-cheng-dubbo/"/>
+    <updated>2015-03-18T09:54:00+08:00</updated>
+    <id>http://cao-bin.github.io//article/2015/03/jfinal-ji-cheng-dubbo/</id>
+    <content type="html"><![CDATA[<p>通过我的推荐，公司上个产品使用了淘宝的dubbo框架，应用效果还不错。
+后端技术使用的是：springmvc+hibernatejap+dubbo。
+最近参与一个新的产品，想使用jfinal做后端，同时集成dubbo框架，
+网上没有现成的集成例子，自己动手丰衣足食，其中也遇到了一些坑，为了
+避免有同样需求的人出错，这里做个记录。</p>
+<h5>步骤</h5>
+<pre>1.  准备jar文件，拷贝jfinal的spring支持jar文件到web-inf/lib目录下
+</pre><p><img src="/images/2015-03-18-jfinal-ji-cheng-dubbo/spring3.1.1.png" alt="spring依赖" /></p>
+<pre>2.  拷贝dubbo依赖到web-inf/lib目录下。一定要拷贝到lib目录下并在eclipse中右键buildpath -&gt; add to buildpath
+    运行的时候，项目会验证dubbo.xsd文件。文件在dubbo.2.5.3.jar中。
+</pre><p><img src="/images/2015-03-18-jfinal-ji-cheng-dubbo/dubbo2.5.3.png" alt="dubbo依赖" /></p>
+<pre>3.  applicationContext.xml、consumer.xml文件放到eclipse项目的src根目录下
+    applicationContext.xml内容
+</pre><pre class='brush:xml'>&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
+&lt;beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+
+    xsi:schemaLocation="
+          http://www.springframework.org/schema/beans   
+          http://www.springframework.org/schema/beans/spring-beans.xsd   
+          http://www.springframework.org/schema/context   
+          http://www.springframework.org/schema/context/spring-context.xsd   "&gt;
+
+    &lt;import resource="consumer.xml"/&gt;
+&lt;/beans&gt; 
+</pre><pre>    consumer.xml内容，注意接口的包路径一定要和提供者的package一致。不然找不到。
+</pre><pre class='brush:xml'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans        
+    http://www.springframework.org/schema/beans/spring-beans.xsd        
+    http://code.alibabatech.com/schema/dubbo        
+    http://code.alibabatech.com/schema/dubbo/dubbo.xsd 
+
+    "&gt;
+
+    &lt;!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 --&gt;
+    &lt;dubbo:application name="xjly3"  /&gt;
+
+    &lt;!-- 使用multicast广播注册中心暴露发现服务地址 --&gt;
+    &lt;dubbo:registry  protocol="zookeeper"  address="127.0.0.1:2181" /&gt;
+    &lt;!-- 生成远程服务代理，可以和本地bean一样使用demoService --&gt;
+    &lt;dubbo:reference id="demoService" interface="com.supermap.egispservice.base.service.DemoService" version="2.5.3" check="false"/&gt;
+
+&lt;/beans&gt;
+</pre><pre>    provider.xml内容，这个文件是放在提供者项目中的。
+</pre><pre class='brush:xml'>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://code.alibabatech.com/schema/dubbo
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"&gt;
+    &lt;!-- 提供方应用信息，用于计算依赖关系 --&gt;
+    &lt;dubbo:application name="provider_menu" /&gt;
+
+    &lt;!--使用zookeeper注册中心暴露服务地址 --&gt;
+    &lt;dubbo:registry  protocol="zookeeper"  address="127.0.0.1:2181" /&gt;
+    &lt;dubbo:protocol port="20821"/&gt;
+    &lt;dubbo:service interface="com.supermap.egispservice.base.service.DemoService" version="2.5.3" ref="demoService"  timeout="30000" retries="0" async="false" loadbalance="leastactive" actives="200"/&gt;
+    &lt;bean id="demoService" class="com.supermap.egispservice.base.service.DemoServiceImpl" /&gt;
+
+&lt;/beans&gt;
+</pre><pre>4.  JfinalConfig子类中添加springplugin
+</pre><pre class='brush:java'>log.info("SpringPlugin spring");
+me.add(new SpringPlugin("classpath:applicationContext.xml"));
+</pre><pre>5.  controller调用代码
+</pre><pre class='brush:java'>import java.util.List;
+
+import little.ant.platform.annotation.Controller;
+import little.ant.platform.controller.BaseController;
+import little.ant.platform.model.User;
+import little.ant.platform.tools.ToolContext;
+import little.ant.crm.model.Customer;
+import little.ant.crm.model.Messenger;
+import little.ant.crm.model.MessengerRemark;
+import little.ant.crm.service.MessengerService;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.jfinal.aop.Before;
+import com.jfinal.plugin.spring.Inject;
+import com.jfinal.plugin.spring.IocInterceptor;
+import com.supermap.egispservice.base.service.DemoService;
+
+@Before(IocInterceptor.class)
+@Controller(controllerKey = "/jf/crm/messenger")
+public class MessengerController extends BaseController {
+
+    @SuppressWarnings("unused")
+    private static Logger log = Logger.getLogger(MessengerController.class);
+
+    @Inject.BY_NAME
+    private DemoService demoService;
+
+    /**
+     * 默认列表
+     */
+    public void index() {
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        log.info(demoService.sayHello("jfinal!"));
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        render("/crm/messenger/list.html");
+    }
+}
+</pre>]]></content>
+  </entry>
   <entry>
     <title type="html"><![CDATA[Openlayers2加载百度地图]]></title>
     <link href="http://cao-bin.github.io//article/2015/02/ol2baidumap/"/>
