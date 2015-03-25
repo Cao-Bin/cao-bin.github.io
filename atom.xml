@@ -3,7 +3,7 @@
   <title><![CDATA[清风飒影 Blog]]></title>
   <link href="http://cao-bin.github.io//atom.xml" rel="self"/>
   <link href="http://cao-bin.github.io//"/>
-  <updated>2015-03-18T11:02:14+08:00</updated>
+  <updated>2015-03-25T13:43:13+08:00</updated>
   <id>http://cao-bin.github.io//</id>
   <author>
     <name><![CDATA[CaoBin]]></name>
@@ -22,6 +22,11 @@
 网上没有现成的集成例子，自己动手丰衣足食，其中也遇到了一些坑，为了
 避免有同样需求的人出错，这里做个记录。
 dubbo文档<a href="http://alibaba.github.io/dubbo-doc-static/Home-zh.htm">http://alibaba.github.io/dubbo-doc-static/Home-zh.htm</a></p>
+<p>注意事项：由于阿里关闭了dubbo.xsd的线上路径。需要将dubbo.xsd文件导入到eclipse本地。
+window->preferences->xml->xml catalog->add->catalog entity->file system
+->dubbo.xsd文件在dubbo-2.5.3.jar中（不限版本，解压到磁盘目录）->
+key=http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+PS:直接导入后，key默认没有后面的/dubbo.xsd 要手动加上，再在项目上右键validate即可消除xml校验错误</p>
 <h5>步骤</h5>
 <pre>1.  准备jar文件，拷贝jfinal的spring支持jar文件到web-inf/lib目录下
 </pre><p><img src="/images/2015-03-18-jfinal-ji-cheng-dubbo/spring3.1.1.png" alt="spring依赖" /></p>
